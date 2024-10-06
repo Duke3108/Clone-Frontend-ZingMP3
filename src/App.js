@@ -1,23 +1,47 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from "react-redux";
+import  { Home, Login, Public, Personal }  from "./containers/public/";
+import { Routes, Route } from "react-router-dom";
+import path from "./ultis/path";
+import * as action from './store/actions'
+
 
 function App() {
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    dispatch(action.getHome())
+  },[])
 
-  const [work, setWork] = useState('')
   return (
-    <div className="flex gap-8 h-screen justify-center items-center">
-      <input 
-      type="text" 
-      className="outline-none border border-blue-600 px-4 py-2 w-[400px]"
-      value={work}
-      onChange={e => setWork(e.target.value)}
-      />
-      <button 
-      type="button"
-      className="outline-none px-4 py-2 bg-blue-500 rounded-md text-white"
-      >
-        Add
-      </button>
+    <>
+    <div className="">
+        <Routes>
+          <Route path={path.PUBLIC} element={<Public/>}>
+            <Route path={path.HOME} element={<Home/>} />
+            <Route path={path.LOGIN} element={<Login/>} />
+            <Route path={path.PERSONAL} element={<Personal/>} />
+
+            <Route path={path.START} element={<Home/>} />
+          </Route>
+        </Routes>
     </div>
+    <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/>
+{/* Same as */}
+<ToastContainer />
+</>
   );
 }
 
