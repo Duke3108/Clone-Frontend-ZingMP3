@@ -73,10 +73,9 @@ const Player = () => {
             if(isShuffle){
                 handleShuffle()
             }else if(isRepeat){
-                handleNextSong()
+                audio.play()
             }else{
-                audio.pause()
-                dispatch(actions.play(false))
+                handleNextSong()
             }
         }
         audio.addEventListener('ended', handleEnded)
@@ -123,6 +122,7 @@ const Player = () => {
         dispatch(actions.setCurSongId(songs[randomIndex].encodeId))
         dispatch(actions.play(true))
     }
+
 
     const handleClickProgressBar = (e) => {
         const trackRect = trackRef.current.getBoundingClientRect()
