@@ -14,8 +14,8 @@ export const sidebarMenu = [
         icon: <MdExplore size={24}/>
     },
     {
-        path: 'zing-chart',
-        text: 'Zing Chart',
+        path: 'chart',
+        text: 'Chart',
         icon: <FaChartPie size={24}/>
     },
     {
