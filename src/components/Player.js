@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useDebugValue, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import * as apis from '../apis'
 import icons from '../ultis/icons'
 import * as actions from '../store/actions'
 import moment from 'moment'
 import { toast } from 'react-toastify'
+import LoadingSong from './LoadingSong'
 
 const {FaHeart,
     FaRegHeart,
@@ -14,29 +15,39 @@ const {FaHeart,
     MdSkipPrevious,
     PiShuffleThin,
     IoIosPlay,
-    IoIosPause} = icons
+    IoIosPause,
+    PiRepeatOnceThin,
+    BsMusicNoteList,
+    SlVolume2,
+    SlVolumeOff} = icons
 var intervalId
 
-const Player = () => {
+const Player = ({setIsShowRightSidebar}) => {
 
     const {curSongId, isPlaying, songs } = useSelector(state => state.music)
     const [audio, setAudio] = useState(new Audio())
     const [songInfo, setSongInfo] = useState(null)
     const [curSecond, setCurSecond] = useState(0)
     const [isShuffle, setIsShuffle] = useState(false)
-    const [isRepeat, setIsRepeat] = useState(false)
+    const [repeatMode, setRepeatMode] = useState(0)
+    const [isLoadedSource, setIsLoadedSource] = useState(true)
+    const [volume, setVolume] = useState(50)
     const dispatch = useDispatch()
     const thumbRef = useRef()
     const trackRef = useRef()
 
+    //get data nhac
     useEffect(() => {
         const fetchDetailSong = async () => {
+            setIsLoadedSource(false)
             const [res1,res2] = await Promise.all([
                 apis.apiGetDetailSong(curSongId),
                 apis.apiGetSong(curSongId)
             ])
+            setIsLoadedSource(true)
             if(res1.data.err === 0){
                 setSongInfo(res1.data.data)
+                dispatch(actions.setCurSongData(res1.data.data))
             }
             if(res2.data.err === 0){
                 audio.pause()
@@ -44,7 +55,7 @@ const Player = () => {
             }else{
                 //audio.pause()
                 //setAudio(new Audio())
-                //dispatch(actions.play(false))
+                dispatch(actions.play(false))
                 toast.warn(res2.data.msg)
                 //setCurSecond(0)
                 //thumbRef.current.style.cssText = `right: 100%`
@@ -54,11 +65,12 @@ const Player = () => {
         fetchDetailSong()
     },[curSongId])
 
+    //phat nhac
     useEffect(() => {
         intervalId && clearInterval(intervalId)
         audio.pause()   
         audio.load()
-        if(isPlaying && thumbRef.current){
+        if(isPlaying ){
             audio.play()
             intervalId = setInterval(() => {
                 let percent = Math.round(audio.currentTime *10000 / songInfo.duration) / 100
@@ -68,12 +80,13 @@ const Player = () => {
         }
     }, [audio])
 
+    //sau khi phat het nhac
     useEffect(() => {
         const handleEnded = () => {
             if(isShuffle){
                 handleShuffle()
-            }else if(isRepeat){
-                audio.play()
+            }else if(repeatMode){
+                repeatMode === 1 ? handleRepeatOne (): handleRepeatPlaylist()
             }else{
                 handleNextSong()
             }
@@ -83,7 +96,11 @@ const Player = () => {
         return () => {
             audio.removeEventListener('ended',handleEnded)
         }
-    },[audio, isShuffle, isRepeat])
+    },[audio, isShuffle, repeatMode])
+
+    useEffect(() => {
+        audio.volume = volume / 100
+    },[volume])
 
     const handlePlayMuic = () => {
         if(isPlaying){
@@ -123,6 +140,20 @@ const Player = () => {
         dispatch(actions.play(true))
     }
 
+    const handleRepeatOne = () => {
+        audio.play()
+    }
+
+    const handleRepeatPlaylist = () => {
+        if(songs){
+            let currentSongIndex 
+            songs?.forEach((item, index) => {
+                if(item.encodeId === curSongId) currentSongIndex = index
+            })
+            dispatch(actions.setCurSongId(currentSongIndex === songs.length -1 ? songs[0].encodeId : songs[currentSongIndex + 1].encodeId))
+            dispatch(actions.play(true))
+        }
+    }
 
     const handleClickProgressBar = (e) => {
         const trackRect = trackRef.current.getBoundingClientRect()
@@ -148,7 +179,7 @@ const Player = () => {
         </div>
 
         
-        <div className='w-[40%] flex-auto border border-red-500 flex items-center justify-center py-2 gap-2 flex-col'>
+        <div className='w-[40%] flex-auto flex items-center justify-center py-2 gap-2 flex-col'>
             <div className='flex gap-8 justify-center items-center'>
                 <span 
                     className={`cursor-pointer ${isShuffle && 'text-purple-600'}`}
@@ -165,7 +196,7 @@ const Player = () => {
                     className='cursor-pointer p-1 border border-gray-500 hover:text-main-500 rounded-full'
                     onClick={handlePlayMuic}
                 >
-                    {isPlaying ? <IoIosPause size={24}/> : <IoIosPlay size={24}/> }
+                    {!isLoadedSource ? <LoadingSong/> : isPlaying ? <IoIosPause size={24}/> : <IoIosPlay size={24}/>}
                 </span>
                 <span 
                     className={`${!songs ? 'text-gray-500' : 'cursor-pointer'}`}
@@ -174,11 +205,11 @@ const Player = () => {
                     <MdSkipNext size={24}/>
                 </span>
                 <span
-                    className={`cursor-pointer ${isRepeat && 'text-purple-600'}`} 
+                    className={`cursor-pointer ${repeatMode && 'text-purple-600'}`} 
                     title='Bật phát lại tất cả'
-                    onClick={() => setIsRepeat(prev => !prev)}    
+                    onClick={() => setRepeatMode(prev => prev === 2 ? 0 : prev + 1)}    
                 >
-                    <PiRepeatThin size={24}/>
+                     {repeatMode === 1 ? <PiRepeatOnceThin size={24}/> : <PiRepeatThin size={24} />}
                 </span>
             </div>
 
@@ -197,8 +228,19 @@ const Player = () => {
         </div>
 
 
-        <div className='w-[30%] flex-auto border border-green-500'>
-            Volume
+        <div className='w-[30%] flex-auto flex items-center justify-end gap-4 '>
+            <div className='flex gap-2 items-center'>
+                <span onClick={() => setVolume(prev => +prev === 0 ?  70 : 0)}>{+volume === 0 ? <SlVolumeOff/> : <SlVolume2/>}</span>
+                <input 
+                    type='range' 
+                    step={1} 
+                    min={0} 
+                    max={100} 
+                    value={volume}
+                    onChange={(e) => setVolume(e.target.value)}
+                />
+            </div>
+            <span onClick={() => setIsShowRightSidebar(prev => !prev)} className='p-1 rounded-sm cursor-pointer bg-main-500 opacity-90 hover:opacity-100'><BsMusicNoteList size={20}/></span>
         </div>
 
     </div>

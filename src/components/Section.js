@@ -1,30 +1,25 @@
 import React, { memo } from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import SectionItem from './SectionItem'
 
-
-const Section = () => {
-
-    const { trending } = useSelector(state => state.app)
-    const navigate = useNavigate()
-
+const Section = ({data}) => {
   return (
     <div className='mt-12 px-[60px] flex flex-col gap-5'>
-        <h3 className='text-[20px] font-bold'>{trending?.title}</h3>
+        <div className='flex items-center justify-between'>
+            <h3 className='text-[27px] font-bold'>{data?.title}</h3>
+            <span className='text-xs'>TẤT CẢ</span>
+        </div>
 
-        <div className='flex items-center justify-between gap-[28px]'>
-            {trending && trending?.items?.length > 0 && trending.items.map(item => (
-                <div
+        <div className='flex items-start justify-between gap-[28px]'>
+            {data && data?.items?.length > 0 && data.items.filter((item, index) => index < 5)?.map(item => (
+                <SectionItem
                     key={item.encodeId}
-                    onClick={() => {
-                        navigate(item?.link?.split('.')[0])
-                    }}
-                    className='flex flex-col gap-3 flex-auto w-1/5 text-sm cursor-pointer'
-                >
-                        <img src={item.thumbnailM} alt='thumbnail' className='w-full h-auto rounded-lg'/>
-                        <span>{`${item.sortDescription?.slice(0,40)}...`}</span>
-                </div>
-                
+                    data={data}
+                    title={item.title}
+                    link={item.link}
+                    sortDescription={item.sortDescription}
+                    thumbnailM={item.thumbnailM}
+                    artistsNames={item.artistsNames}
+                />
             ))}
         </div>
        

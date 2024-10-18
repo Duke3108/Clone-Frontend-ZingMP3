@@ -12,9 +12,12 @@ import { MdSkipNext,MdSkipPrevious } from "react-icons/md";
 import { PiShuffleThin } from "react-icons/pi";
 import { IoIosPause } from "react-icons/io";
 import { PiMusicNotesSimpleThin } from "react-icons/pi";
-import { BsDot } from "react-icons/bs";
-import { PiRepeatThin } from "react-icons/pi";
+import { BsDot, BsMusicNoteList } from "react-icons/bs";
+import { PiRepeatThin, PiRepeatOnceThin } from "react-icons/pi";
 import { IoIosPlay } from "react-icons/io";
+import { SlVolume2, SlVolumeOff} from "react-icons/sl";
+import { ImBin } from "react-icons/im";
+import { SlUserFollow } from "react-icons/sl";
 
 const icons = {
     FaRegUser,
@@ -34,7 +37,13 @@ const icons = {
     IoIosPlay,
     IoIosPause,
     PiMusicNotesSimpleThin,
-    BsDot
+    BsDot,
+    PiRepeatOnceThin,
+    BsMusicNoteList,
+    SlVolume2,
+    SlVolumeOff,
+    ImBin,
+    SlUserFollow
 }
 
 export default icons
