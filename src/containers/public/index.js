@@ -7,4 +7,5 @@ export{ default as Search} from './Search'
 export{ default as SearchSongs} from './SearchSongs'
 export{ default as SearchAll} from './SearchAll'
 export{ default as Singer} from './Singer'
+export{ default as SearchPlaylist} from './SearchPlaylist'
 

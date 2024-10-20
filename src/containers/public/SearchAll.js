@@ -13,7 +13,7 @@ const SearchAll = () => {
       <div className='flex flex-col w-full'>
         <h3 className='text-lg font-bold mb-5'>Nổi bật</h3>
         <div className='flex gap-8 '>
-            {searchData?.top && <div className='p-[10px] cursor-pointer flex-1 bg-main-200 flex gap-8 items-center'>
+            {searchData?.top && <div className='p-[10px] cursor-pointer flex-1 bg-main-200 flex gap-8 items-center rounded-lg'>
                 <img src={searchData.top.thumbnail} alt='avatar' className={`w-[84px] h-[84px] object-cover ${searchData.top.objectType === 'artist' && 'rounded-full'}`}/>
                 <div className='flex flex-col'>
                   <span className='mb-[6px]'>{searchData.top.objectType === 'artist' ? 'Nghệ sĩ' : ''}</span>
@@ -40,7 +40,7 @@ const SearchAll = () => {
         <h3 className='text-lg font-bold mb-5'>Bài hát</h3>
         <div className='flex justify-between flex-wrap w-full'>
             {searchData?.songs?.filter((item, index) => index < 8)?.map(item => (
-              <div key={item.encodeId} className='flex-auto w-[45%]'>
+              <div key={item.encodeId} className='flex-auto w-full 1000:w-[45%]'>
                 <SongList
                   songData={item}
                   isHideAlbum
@@ -75,13 +75,14 @@ const SearchAll = () => {
                   image={item.thumbnailM}
                   artistsNames={item.name}
                   follow={item.totalFollow}
+                  link={item.link}
                 />  
             ))}
         </div>
       </div>
 
 
-      <div className='w-full h-[90px]'></div>
+      <div className='w-full h-[100px]'></div>
 
     </div>
   )

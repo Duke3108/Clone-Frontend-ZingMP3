@@ -6,13 +6,13 @@ import { useDispatch } from 'react-redux'
 
 const {PiMusicNotesSimpleThin} = icons
 
-const SongList = ({songData, isHideAlbum}) => {
+const SongList = ({songData, isHideAlbum, isHideNodeIcon}) => {
 
     const dispatch = useDispatch()
 
   return (
     <div 
-    className='flex justify-between items-center p-[10px] border-t border-[rgba(0,0,0,0.05)] hover:bg-[#DDE4E4] cursor-pointer'
+    className='flex justify-between items-center p-[10px] border-b border-[rgba(0,0,0,0.05)] hover:bg-[#DDE4E4] cursor-pointer'
     onClick={() => {
         dispatch(actions.setCurSongId(songData?.encodeId))
         dispatch(actions.play(true))
@@ -22,7 +22,7 @@ const SongList = ({songData, isHideAlbum}) => {
     }}
     >
         <div className='flex items-center gap-3 flex-1'>
-            {!isHideAlbum && <span><PiMusicNotesSimpleThin/></span>}
+            {!isHideNodeIcon && !isHideAlbum && <span><PiMusicNotesSimpleThin/></span>}
             <img src={songData?.thumbnail} alt='thumbnailM' className='w-10 h-10 object-cover rounded-md'/>
             <span className='flex flex-col w-full'>
                 <span className='text-sm font-semibold'>{songData?.title?.length > 25 ? `${songData?.title?.slice(0,25)}...` : songData?.title}</span>
@@ -32,7 +32,7 @@ const SongList = ({songData, isHideAlbum}) => {
         {!isHideAlbum && <div className='flex-1 flex items-center justify-center'>
             {songData?.album?.title?.length > 30 ? `${songData?.album?.title?.slice(0,30)}...` : songData?.album?.title}
         </div>}
-        <div className='flex-1 flex justify-end text-xs opacity-70'>
+        <div className='flex-1 flex justify-end text-xs opacity-70 font-semibold'>
             {moment.utc(songData?.duration * 1000).format('mm:ss')}
         </div>
     </div>

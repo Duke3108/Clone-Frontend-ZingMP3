@@ -18,6 +18,7 @@ import { IoIosPlay } from "react-icons/io";
 import { SlVolume2, SlVolumeOff} from "react-icons/sl";
 import { ImBin } from "react-icons/im";
 import { SlUserFollow } from "react-icons/sl";
+import { GrClose } from "react-icons/gr";
 
 const icons = {
     FaRegUser,
@@ -43,7 +44,8 @@ const icons = {
     SlVolume2,
     SlVolumeOff,
     ImBin,
-    SlUserFollow
+    SlUserFollow,
+    GrClose
 }
 
 export default icons

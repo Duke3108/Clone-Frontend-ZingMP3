@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { Player, SidebarLeft, SidebarRight, Header, LoadingPlaylist } from "../../components";
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useSelector } from "react-redux";
@@ -8,6 +8,7 @@ const Public = () => {
 
     const [isShowRightSidebar, setIsShowRightSidebar] = useState(true)
     const { isLoadingPlaylist} = useSelector(state => state.music)
+    const {singer} = useParams()
 
     return (
         <div className="w-full relative h-screen flex flex-col bg-main-300">
@@ -21,7 +22,7 @@ const Public = () => {
                     {isLoadingPlaylist && <div className='absolute top-0 bottom-0 left-0 right-0 bg-main-200 z-20 flex items-center justify-center'>
                         <LoadingPlaylist/>
                     </div>}
-                    <div className="h-[70px] flex-none px-[60px] flex items-center ">
+                    <div className={`${singer ? 'h-[70px] fixed top-0 left-[240px] right-[330px] px-[60px] z-50 flex items-center' : 'h-[70px] flex-none px-[60px] z-50 flex items-center'}`}>
                         <Header/>
                     </div>
                     <div className="flex-auto w-full">

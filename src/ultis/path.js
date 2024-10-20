@@ -9,7 +9,9 @@ const path = {
     SEARCH: 'tim-kiem',
     ALL: 'tat-ca',
     SONG: 'bai-hat',
-    HOME__SINGER: ':singer'
+    PLAYLIST_SEARCH: 'playlist',
+    HOME__SINGER: ':singer',
+    HOME_ARTIST__SINGER: 'nghe-si/:singer',
 }
 
 export default path

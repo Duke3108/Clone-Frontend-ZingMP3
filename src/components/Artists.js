@@ -1,15 +1,14 @@
 import React, {memo, useRef, useState} from 'react'
-import { useNavigate } from 'react-router-dom'
 import { handleNumber } from '../ultis/fn'
 import icons from '../ultis/icons'
+import { Link } from 'react-router-dom'
 
 const {SlUserFollow,PiShuffleThin} = icons
 
-const Artists = ({image,artistsNames,follow}) => {
+const Artists = ({image,artistsNames,follow,link}) => {
 
     const [isHover, setIsHover] = useState(false)
     const imageRef = useRef()
-    const navigate = useNavigate()
 
     const handleHover = () => {
         setIsHover(true)
@@ -25,7 +24,8 @@ const Artists = ({image,artistsNames,follow}) => {
 
   return (
     <div className='w-1/5 flex flex-col gap-4'>
-        <div
+        <Link
+            to={link}
             onMouseEnter={handleHover}
             onMouseLeave={handleLeave}
             className='relative overflow-hidden rounded-full cursor-pointer'
@@ -37,9 +37,9 @@ const Artists = ({image,artistsNames,follow}) => {
                     }} className='p-1 border border-white rounded-full'><PiShuffleThin size={35}/></span> 
             </div>}
             <img src={image} alt='avt' ref={imageRef} className='w-full object-contain rounded-full'/>
-        </div>
+        </Link>
         <div className='flex gap-1 flex-col items-center'>
-            <span className='text-sm font-medium'>{artistsNames}</span>
+            <Link to={link} className='text-sm font-medium hover:underline hover:text-main-500 cursor-pointer'>{artistsNames}</Link>
             <span className='test-xs opacity-70'>{`${handleNumber(follow)} theo dõi`}</span>
             <button
                 type='button'

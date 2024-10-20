@@ -2,7 +2,7 @@ import React, { memo, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import icons from '../ultis/icons'
 
-const SectionItem = ({link, title,thumbnailM,artistsNames,data,sortDescription}) => {
+const SectionItem = ({link, title,thumbnailM,artistsNames,data,sortDescription,search}) => {
     const navigate = useNavigate()
     const [isHover, setIsHover] = useState(false)
     const imageRef = useRef()
@@ -24,7 +24,7 @@ const SectionItem = ({link, title,thumbnailM,artistsNames,data,sortDescription})
         onClick={() => {
             navigate(link?.split('.')[0], { state: { playAlbum: false }})
         }}
-        className='flex flex-col gap-3 flex-auto justify-start w-1/5 text-sm cursor-pointer'
+        className={`flex flex-col gap-3 w-1/5 text-sm cursor-pointer ${search && 'p-4'}`}
     >
         <div
             onMouseEnter={handleHover}
