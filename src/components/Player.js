@@ -1,4 +1,4 @@
-import React, { useDebugValue, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import * as apis from '../apis'
 import icons from '../ultis/icons'
@@ -32,9 +32,11 @@ const Player = ({setIsShowRightSidebar}) => {
     const [repeatMode, setRepeatMode] = useState(0)
     const [isLoadedSource, setIsLoadedSource] = useState(true)
     const [volume, setVolume] = useState(50)
+    const [isHoverVolume, setIsHoverVolume] = useState(false)
     const dispatch = useDispatch()
     const thumbRef = useRef()
     const trackRef = useRef()
+    const volumeRef = useRef()
 
     //get data nhac
     useEffect(() => {
@@ -100,6 +102,12 @@ const Player = ({setIsShowRightSidebar}) => {
 
     useEffect(() => {
         audio.volume = volume / 100
+    },[volume])
+
+    useEffect(() => {
+        if(volumeRef.current){
+            volumeRef.current.style.cssText = `right:${100 - volume}%`
+        }
     },[volume])
 
     const handlePlayMuic = () => {
@@ -177,7 +185,6 @@ const Player = ({setIsShowRightSidebar}) => {
                 <span><BsThreeDots size={16}/></span>
             </div>
         </div>
-
         
         <div className='w-[40%] flex-auto flex items-center justify-center py-2 gap-2 flex-col'>
             <div className='flex gap-8 justify-center items-center'>
@@ -227,10 +234,16 @@ const Player = ({setIsShowRightSidebar}) => {
             </div>
         </div>
 
-
-        <div className='w-[30%] flex-auto flex items-center justify-end gap-4 '>
-            <div className='flex gap-2 items-center'>
+        <div className='w-[30%] hidden flex-auto min-[640px]:flex items-center justify-end gap-4 '>
+            <div 
+                className='flex gap-2 items-center'
+                onMouseEnter={() => setIsHoverVolume(true)}
+                onMouseLeave={() => setIsHoverVolume(false)}
+            >
                 <span onClick={() => setVolume(prev => +prev === 0 ?  70 : 0)}>{+volume === 0 ? <SlVolumeOff/> : <SlVolume2/>}</span>
+                <div className={`w-[120px] h-[6px] bg-white rounded-l-full rounded-r-full ${isHoverVolume ? 'hidden' : 'relative'}`}>
+                    <div ref={volumeRef} className='absolute left-0 bottom-0 top-0 bg-main-500 rounded-l-full rounded-r-full'></div>
+                </div> 
                 <input 
                     type='range' 
                     step={1} 
@@ -238,6 +251,7 @@ const Player = ({setIsShowRightSidebar}) => {
                     max={100} 
                     value={volume}
                     onChange={(e) => setVolume(e.target.value)}
+                    className={`w-[120px] ${isHoverVolume ? 'inline' : 'hidden'}`}
                 />
             </div>
             <span onClick={() => setIsShowRightSidebar(prev => !prev)} className='p-1 rounded-sm cursor-pointer bg-main-500 opacity-90 hover:opacity-100'><BsMusicNoteList size={20}/></span>

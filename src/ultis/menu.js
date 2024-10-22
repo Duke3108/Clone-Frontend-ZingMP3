@@ -18,11 +18,7 @@ export const sidebarMenu = [
         text: 'Chart',
         icon: <FaChartPie size={24}/>
     },
-    {
-        path: 'follow',
-        text: 'Theo dõi',
-        icon: <RiUserFollowLine size={24}/>
-    }
+    
 ]
 
 export const searchMenu = [

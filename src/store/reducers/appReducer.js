@@ -7,6 +7,7 @@ const initState = {
     top100: null,
     albumhot: null,
     newRelease: null,
+    currentWidth: null
 }
 
 const appReducer = (state = initState, action) => {
@@ -22,6 +23,11 @@ const appReducer = (state = initState, action) => {
                 newRelease: action.homeData?.find(item => item.sectionType === 'new-release') || null,
             }
         
+        case actionTypes.CURRENT_WIDTH:
+            return {
+                ...state,
+                currentWidth: action.w
+            }
         default:
             return state
     }

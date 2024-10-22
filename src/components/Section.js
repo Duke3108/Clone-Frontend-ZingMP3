@@ -1,9 +1,11 @@
 import React, { memo } from 'react'
 import SectionItem from './SectionItem'
+import { useSelector } from 'react-redux'
 
 const Section = ({data}) => {
 
     const number = data?.items?.length
+    const {currentWidth} = useSelector(state => state.app)
 
   return (
     <div className='mt-[30px] px-[60px] flex flex-col gap-5'>
@@ -13,7 +15,7 @@ const Section = ({data}) => {
         </div>
 
         <div className='flex gap-[28px]'>
-            {data && data?.items?.length > 0 && data.items.filter((item, index) => index < 5)?.map(item => (
+            {data && data?.items?.length > 0 && data.items.filter((item, index) => index <= (currentWidth < 600 ? 2 : currentWidth < 800 ? 3 : 4))?.map(item => (
                 <SectionItem
                     key={item.encodeId}
                     data={data}

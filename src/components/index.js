@@ -14,4 +14,6 @@ export { default as SongItem } from './SongItem'
 export { default as NewRelease } from './NewRelease'
 export { default as SectionItem } from './SectionItem'
 export { default as Artists } from './Artists'
+export { default as SliderButton } from './SliderButton'
+
 

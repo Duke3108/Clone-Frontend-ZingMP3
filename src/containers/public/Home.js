@@ -1,13 +1,14 @@
-import { Section, Slider, NewRelease} from "../../components";
+import { Section, Slider, NewRelease, LoadingPlaylist} from "../../components";
 import { useSelector } from 'react-redux'
-import { Link } from "react-router-dom";
 
 const Home = () => {
 
     const { trending, chill, top100, albumhot } = useSelector(state => state.app)
 
     return (
-        <div className="overflow-y-auto w-full">
+        <>
+        {(trending && chill && top100 && albumhot) 
+        ? <div className="overflow-y-auto w-full">
             <Slider/>
             <NewRelease/>
             <Section data={trending}/>
@@ -16,6 +17,11 @@ const Home = () => {
             <Section data={albumhot}/>
             <div className="w-full h-[150px]"></div>
         </div>
+
+        : <div className="w-full h-full flex items-center justify-center">
+            <LoadingPlaylist/>
+        </div>}
+        </>
     )
 }
 

@@ -24,7 +24,7 @@ const SectionItem = ({link, title,thumbnailM,artistsNames,data,sortDescription,s
         onClick={() => {
             navigate(link?.split('.')[0], { state: { playAlbum: false }})
         }}
-        className={`flex flex-col gap-3 w-1/5 text-sm cursor-pointer ${search && 'p-4'}`}
+        className={`flex flex-col gap-3 flex-1 text-sm cursor-pointer ${search && 'p-4'}`}
     >
         <div
             onMouseEnter={handleHover}
@@ -42,7 +42,7 @@ const SectionItem = ({link, title,thumbnailM,artistsNames,data,sortDescription,s
             <img ref={imageRef} src={thumbnailM} alt='thumbnail' className='w-full h-auto rounded-lg'/>
         </div>
         <span className='flex flex-col'>
-            <span className='text-[20px] font-bold'>{title.length > 30 ? title.slice(0,30)+ '...' : title}</span>
+            <span className='text-[20px] font-bold'>{title.length > 25 ? title.slice(0,25)+ '...' : title}</span>
             {data?.sectionId === 'hEditorTheme1' ? <span>{sortDescription?.length >= 40 ? `${sortDescription?.slice(0,40)}...`: sortDescription}</span> : 
             data?.sectionId === 'hEditorTheme' ? <span>{sortDescription?.length >= 40 ? `${sortDescription?.slice(0,40)}...`: sortDescription}</span> : 
             <span>{artistsNames}</span>}    

@@ -19,6 +19,7 @@ import { SlVolume2, SlVolumeOff} from "react-icons/sl";
 import { ImBin } from "react-icons/im";
 import { SlUserFollow } from "react-icons/sl";
 import { GrClose } from "react-icons/gr";
+import { MdArrowBackIosNew, MdArrowForwardIos  } from "react-icons/md";
 
 const icons = {
     FaRegUser,
@@ -45,7 +46,9 @@ const icons = {
     SlVolumeOff,
     ImBin,
     SlUserFollow,
-    GrClose
+    GrClose,
+    MdArrowBackIosNew, 
+    MdArrowForwardIos
 }
 
 export default icons

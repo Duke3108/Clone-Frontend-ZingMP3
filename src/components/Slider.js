@@ -1,21 +1,36 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getArrSlider } from '../ultis/fn'
 import * as actions from '../store/actions'
 import { useNavigate } from 'react-router-dom'
+import icons from '../ultis/icons'
+import SliderButton from './SliderButton'
 
+var intervalId
 const Slider = () => {
 
     const {banner} = useSelector(state => state.app)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const {MdArrowBackIosNew, MdArrowForwardIos} = icons
+    const [min, setMin] = useState(0)
+    const [max, setMax] = useState(2)
+    const [isAuto, setIsAuto] = useState(true)
     
     useEffect(() =>{
+        if(isAuto){
+            intervalId = setInterval(() => {
+                handleAnimationBanner(1)
+            }, 3000)
+        }
+        return () => {
+            intervalId && clearInterval(intervalId)
+        }
+    },[min,max,isAuto])
+
+    const handleAnimationBanner = (step) => {
         const sliderEls = document.getElementsByClassName('slider-item')
-        let min = 0
-        let max = 2
-        const intervalId = setInterval(() => {
-            const list = getArrSlider(min, max, sliderEls.length -1)
+        const list = getArrSlider(min, max, sliderEls.length -1)
             for(let i = 0; i < sliderEls.length; i++){
 
                 sliderEls[i].classList.remove('animate-slide-right','order-last','z-20')
@@ -38,22 +53,15 @@ const Slider = () => {
                     sliderEls[item].classList.add('animate-slide-left2','order-2','z-10')
                 }
             })
-
-            if(min === sliderEls.length -1){
-                min = 0
-            }else{
-                min += 1
+            if(step === 1){
+                setMin(prev => prev === sliderEls.length - 1 ? 0 : prev + step)
+                setMax(prev => prev === sliderEls.length - 1 ? 0 : prev + step)
             }
-            if(max === sliderEls.length -1){
-                max = 0
-            }else{
-                max += 1
+            if(step === -1){
+                setMin(prev => prev === 0 ? sliderEls.length - 1 : prev + step)
+                setMax(prev => prev === 0 ? sliderEls.length - 1 : prev + step)
             }
-        }, 3000)
-        return () => {
-            intervalId && clearInterval(intervalId)
-        }
-    },[])
+    }
 
     const handleClickBanner = (item) => {
         if(item?.type === 1){
@@ -68,9 +76,29 @@ const Slider = () => {
         }
     }
 
+    const handleBack = useCallback((step) => {
+        intervalId && clearInterval(intervalId)
+        setIsAuto(false)
+        handleAnimationBanner(step)
+    },[min,max]) 
+
     return (
-    <div className='w-full overflow-hidden px-[60px]'>
-        <div className='flex gap-8 pt-8'>
+    <div className='w-full overflow-hidden px-[60px] relative'>
+        <SliderButton
+            icon={<MdArrowBackIosNew size={30}/>}
+            style='absolute top-1/2 left-[70px] bg-[rgba(255,255,255,0.3)] z-50 text-white p-2 rounded-full'
+            handleOnClick={() => handleBack(1)}
+        />
+<       SliderButton
+            icon={<MdArrowForwardIos size={30}/>}
+            style='absolute top-1/2 right-[70px] bg-[rgba(255,255,255,0.3)] z-50 text-white p-2 rounded-full'
+            handleOnClick={() => handleBack(-1)}
+        />
+
+        <div 
+            className='flex gap-8 pt-8'
+            onMouseLeave={e => setIsAuto(true)}
+        >
         {banner?.map((item, index) => (
             <img
                 alt='banner'

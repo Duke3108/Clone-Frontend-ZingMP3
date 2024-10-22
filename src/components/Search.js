@@ -34,7 +34,7 @@ const Search = () => {
         </span>
       <input
           type='text'
-          className={`bg-main-200 outline-none  px-4 py-2 w-full rounded-r-[20px] h-10 text-gray-500`}
+          className={`bg-main-200 outline-none px-4 py-2 w-full rounded-r-[20px] h-10 text-gray-500`}
           placeholder='Tìm kiếm bài hát, nghệ sĩ, lời bài hát...'
           value={keyword}
           onChange={e => setKeyword(e.target.value)}
